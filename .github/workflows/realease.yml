@@ -1,0 +1,28 @@
+name: Build and Release Windows
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Clonar codigo
+        uses: actions/checkout@v4
+
+      - name: Compilar codigo C++ para Windows (.exe)
+        run: |
+          g++ main.cpp -o mi_programa.exe
+
+      - name: Publicar Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: mi_programa.exe
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
